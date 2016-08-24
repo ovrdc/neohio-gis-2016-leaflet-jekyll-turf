@@ -1,0 +1,48 @@
+---
+basemap: contrast
+---
+var blockGroups = L.geoJson(null, {
+  onEachFeature: function(feature, layer) {
+    lmi = layer.feature.properties.lowmodpct * 100;
+    layer.bindPopup('LMI: ' + lmi + '%');
+  }
+});
+
+var data = omnivore.topojson('data/esri_blockgroups_cleveland.json', null, blockGroups);
+
+data.on('ready', function() {
+  var choropleth = L.choropleth(data.toGeoJSON(), {
+    valueProperty: 'lowmodpct',
+    scale: ['white', 'orange', 'red'],
+    steps: 7,
+    mode: 'q',
+    style: {
+      color: '#fff',
+      weight: 1,
+      fillOpacity: 0.6
+    },
+    onEachFeature: function(feature, layer) {
+      lmi = (layer.feature.properties.lowmodpct * 100).toFixed(2);
+      layer.bindPopup('<h3>LMI: ' + lmi + '%</h3>');
+    },
+  }).addTo(map);
+  var legend = L.control({ position: 'bottomright' });
+  legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend')
+    var colors = choropleth.options.colors
+    console.log(colors);
+    var labels = []
+
+    // Add min & max
+    div.innerHTML = '<div><h4>HUD LMI 2015 (%)<a href="https://www.hudexchange.info/manage-a-program/acs-low-mod-summary-data/" style="text-decoration:none;"> (data)</a></h4></div><div class="labels"><div class="min">Low</div> \
+  <div class="max">High</div></div>'
+
+  for (i = 1; i < colors.length; i++) {
+      labels.push('<li style="background-color: ' + colors[i] + '"></li>')
+    }
+
+  div.innerHTML += '<ul style="list-style-type:none;display:flex">' + labels.join('') + '</ul>'
+  return div
+  }
+  legend.addTo(map);
+});

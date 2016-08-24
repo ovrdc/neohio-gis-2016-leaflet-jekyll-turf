@@ -1,0 +1,10 @@
+---
+---
+var blockGroups = L.geoJson(null, {
+  onEachFeature: function(feature, layer) {
+    lmi = layer.feature.properties * 100
+    layer.bindPopup('LMI: ' + layer.feature.properties.lowmodpct + '%')
+  }
+}).addTo(map)
+
+var data = omnivore.topojson('/data/esri_blockgroups_cleveland.json', null, blockGroups);

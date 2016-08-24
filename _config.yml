@@ -1,0 +1,30 @@
+#default site with leaflet added using jekyll new site
+
+# Site settings
+title: Intro to Leaflet & Jekyll
+email: mmeyer@ovrdc.org
+description: "This repo contains examples from the presentation at the Northeast Ohio GIS Symposium talk on Leaflet, Jekyll and TurfJS.
+To view the examples, either run jekyll serve in the jekyll-leaflet-turf folder, or just view the html files in the jekyll-leaflet-turf/_site/examples folder. You will want to view these with Firefox if you are not running a local web server."
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "" # the base hostname & protocol for your site
+twitter_username: getbounds
+github_username:  reyemtm
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+include: ["_pages"]
+output_ext: html
+permalink: /:title.html
+
+#Define default layout and categories to make this a bit easier for my map example posts
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "posts" # previously `post` in Jekyll 2.2.
+    values:
+      layout: "map"
+      category: "examples"
+      permalink: /:title.html

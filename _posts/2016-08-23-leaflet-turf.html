@@ -1,0 +1,25 @@
+---
+---
+var blockGroups = L.geoJson(null, {
+  style: {
+    color: 'white',
+    weight: 1,
+    fillColor: 'skyblue',
+    fillOpacity: 0.8
+  },
+}).addTo(map);
+
+var data = omnivore.topojson('data/esri_blockgroups_cleveland.json', null, blockGroups);
+var bridges = omnivore.geojson("data/cuy_bridges.geojson");
+
+var choropleth;
+data.on('ready', function() {
+
+  var selBridges = new L.geoJson().addTo(map);
+  blockGroups.on('click', function(e) {
+    selBridges.clearLayers();
+    var selLayer = new L.geoJson(e.layer.toGeoJSON());
+    var within = turf.within(bridges.toGeoJSON(), selLayer.toGeoJSON());
+    selBridges.addData(within);
+  });
+});

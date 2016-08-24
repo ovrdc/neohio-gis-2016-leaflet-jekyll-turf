@@ -1,0 +1,147 @@
+var now = Date.now();
+var done;
+
+var blockGroups = L.geoJson(null, {
+  style: {
+    color: 'white',
+    weight: 1,
+    fillColor: 'skyblue',
+    fillOpacity: 0.8
+  },
+});
+var y = 0;
+var data, choropleth;
+var ga = [];
+var bridges = omnivore.geojson("data/cuy_bridges.geojson");
+
+bridges.on('ready', function() {
+  y = y + 1;
+  data = omnivore.topojson("data/esri_blockgroups_cleveland.json", null, blockGroups);
+  data.on('ready', analyze)
+});
+
+function analyze() {
+  //console.log(y);
+  console.log('analyzing');
+  ga = turf.collect(data.toGeoJSON(), bridges.toGeoJSON(), 'garating', 'values');
+  buildMap();
+}
+
+function buildMap() {
+  console.log('building choropleth');
+  //Check if the turf function worked - I know this one has bridges - if not throw an error
+  if (ga.features[1].properties.values.length <= 0) {
+    //console.log(ga);
+    alert('TurfJS hit a snag. Try reloading the page to see the maps.')
+  } else {
+    //console.log(ga);
+    //Layer for block groups with no bridges inside
+    var noData = L.geoJson(ga, {
+      filter: function(feature, layer) {
+        if (feature.properties.values.length == 0) {
+          return true
+        }
+      },
+      style: {
+        color: 'gray',
+        weight: 1,
+        fillColor: 'gray',
+        fillOpacity: 0.6
+      },
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup('<h3>No Data</h3>')
+      }
+    }).addTo(map);
+
+    //Layer for block groups with bridges
+    var gaFeature = L.geoJson(ga, {
+      filter: function(feature, layer) {
+        if (feature.properties.values.length > 0) {
+          return true
+        }
+      },
+      onEachFeature: function(feature, layer) {
+        var garating = 0;
+        //loop through values array to get total - turf.average() may be deprecated??
+        //both mapbox and turf have examples online that seem to reference different turfjs versions
+        var v = layer.feature.properties.values;
+        for (i = 0; i < v.length; i++) {
+          garating += v[i]
+        }
+        //then get the avg bridge rating
+        layer.feature.properties.avgga = (garating / v.length).toFixed(2);
+        layer.feature.properties.count = (v.length).toString();
+      }
+    });
+
+    /*Then build the choropleth layer based on the previous geojson layer.
+      This could probably be done inside value property which can take a function that
+      returns a value. There should also be some promise here or something to catch errors.*/
+    choropleth = new L.choropleth(gaFeature.toGeoJSON(), {
+      valueProperty: 'avgga',
+      scale: ['red', 'orange', 'lightgray'],
+      steps: 7,
+      mode: 'q',
+      style: {
+        color: '#fff',
+        weight: 1,
+        fillOpacity: 0.6
+      },
+      onEachFeature: function(feature, layer) {
+        var p = layer.feature.properties;
+        layer.bindPopup('<h3>Avg Bridge Rating: ' + (p.avgga).toString() +
+          '</h3>Total Bridges: ' + p.count +
+          '<br /><em>*A Rating of 4 or below is deficient</em>');
+      }
+    }).addTo(map);
+
+
+    //This section creates a bridge layer using the turf.within() after clicking on the
+    //choropleth layer
+    var selBridges = new L.geoJson(null, {
+      pointToLayer: function(feature, latlng) {
+        if (feature.properties.garating <= 4) {
+          return L.circleMarker(latlng, {
+            radius: 10,
+            fillColor: "firebrick",
+            color: "#fff",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.9,
+            pane: 'markerPane'
+          })
+        } else {
+          return L.circleMarker(latlng, {
+            radius: 7,
+            fillColor: "green",
+            color: "#fff",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+            pane: 'markerPane'
+          })
+        }
+      },
+      onEachFeature: function(feature, layer) {
+        var rating;
+        if (layer.feature.properties.garating <= 4) {
+          rating = 'Deficient'
+        } else {
+          rating = 'OK'
+        }
+        layer.bindPopup('Status: ' + rating)
+      }
+    }).addTo(map);
+
+    //turf within
+    choropleth.on('click', function(e) {
+      selBridges.clearLayers();
+      var selLayer = new L.geoJson(e.layer.toGeoJSON());
+      var within = turf.within(bridges.toGeoJSON(), selLayer.toGeoJSON());
+      selBridges.addData(within);
+      var aggregated = turf.collect(selLayer.toGeoJSON(), bridges.toGeoJSON(), 'garating', 'values');
+    })
+  }
+  done = Date.now();
+  console.log('map loaded in ' + ((done - now) / 1000) + ' seconds')
+}

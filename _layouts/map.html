@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="wrapper">
+          <div class="post">
+
+            <header class="post-header">
+              <h1 class="post-title">{{ page.title }}</h1>
+              <div>{% if page.description %}{{ page.description }}{% endif %}</div>
+            </header>
+            <article class="post-content">
+                <div id="map" style="position:relative;width:100%;height:700px;"></div>
+            </article>
+
+          </div>
+          <div class="PageNavigation">
+            {% if page.previous.url %}
+              <a class="prev" href="{{page.previous.url}}">&laquo; {{page.previous.title}}</a>
+            {% endif %}
+            {% if page.next.url %}
+              <a class="next" href="{{page.next.url}}">{{page.next.title}} &raquo;</a>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+  <script>
+  var map = new L.map('map', {
+      center: {% if page.center %}{{page.center}}{% else %}[41.5, -81.7]{% endif %},
+      zoom: {% if page.zoom %}{{page.zoom}}{% else %}11{% endif %},
+      {% if page.options %}{{ page.options }}{% endif %}
+  });
+  var scale = L.control.scale().addTo(map);
+  var osmhot = new L.tileLayer.provider('OpenStreetMap.HOT');
+  var terrain = new L.tileLayer.provider('Stamen.Terrain');
+
+  var contrastLabels = new L.tileLayer.provider('Stamen.TonerLabels', {pane: 'markerPane'});
+  var contrastBase = new L.tileLayer.provider('Stamen.TonerBackground');
+  var contrast = new L.layerGroup([contrastBase, contrastLabels]);
+  var layerControl = new L.control.layers({
+          "OSM": osmhot,
+          "Contrast": contrast,
+          "Terrain": terrain
+      }).addTo(map);
+  {% if page.basemap %}{{ page.basemap }}{% else %}contrast{% endif %}.addTo(map);
+  //post content
+  {{ content }}
+  //end post content
+  </script>
+</html>
