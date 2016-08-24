@@ -1,6 +1,4 @@
 ##Leaflet, Jekyll & TurfJS
--
---
 ---
 This repo contains examples from the presentation at the Northeast Ohio GIS Symposium talk on Leaflet, Jekyll and TurfJS.
 
