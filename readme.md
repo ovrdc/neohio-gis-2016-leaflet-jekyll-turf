@@ -2,6 +2,6 @@
 
 This repo contains examples from the presentation at the Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS.
 
-To view the examples, either run jekyll serve, or just view the html files. You will want to view these with Firefox if you are not running a local web server.
+To view the examples, downloa this rpsitor, install Jekll and run jekyll serve.
 
-You could also create a gh_pages branch and let github serve it for you.
+You could also fork this repo, create a gh_pages branch and let github serve it for you.
