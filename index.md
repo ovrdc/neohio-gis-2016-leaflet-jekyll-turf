@@ -4,7 +4,7 @@ layout: default
 
 <div class="home">
   <br /><br />
-  #This site contains examples from the presentation at the Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS. View the full presentation [here](https://getbounds.com/slides/neohio-gis-2016-leaflet-jekyll-turfjs/).
+  <h1>his site contains examples from the presentation at the Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS. View the full presentation <a href="https://getbounds.com/slides/neohio-gis-2016-leaflet-jekyll-turfjs/" target="ext">here</a>.</h1>
 
   <ul class="post-list">
     {% for post in site.posts %}
