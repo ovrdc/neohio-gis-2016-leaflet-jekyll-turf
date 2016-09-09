@@ -3,8 +3,8 @@
 # Site settings
 title: Intro to Leaflet & Jekyll
 email: mmeyer@ovrdc.org
-description: "This repo contains examples from the presentation at the Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS.
-To view the examples, either run jekyll serve, or just view the html files in the _sites folder. You will want to view these with Firefox if you are not running a local web server."
+description: >-
+    This site contains examples from the presentation at the Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS. You can view the full presentation <a href="https://getbounds.com/slides/neohio-gis-2016-leaflet-jekyll-turfjs/" target="ext">here</a>.
 baseurl: "https://ovrdc.github.io/neohio-gis-2016-leaflet-jekyll-turf" # the subpath of your site, e.g. /blog/
 url: "" # the base hostname & protocol for your site
 twitter_username: getbounds
