@@ -2,7 +2,7 @@
 
 Examples also available at http://codepen.io/getbounds
 
-This repo contains examples from the presentation at the Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS. You can view the full presentation [here](https://getbounds.com/slides/neohio-gis-2016-leaflet-jekyll-turfjs/).
+This repo contains examples from the presentation at the 2016 Northeast Ohio GIS Symposium on Leaflet, Jekyll and TurfJS. You can view the full presentation [here](https://getbounds.com/slides/neohio-gis-2016-leaflet-jekyll-turfjs/).
 
 To view the examples locally, download this repsitory, install Jekll and run:
 
