@@ -11,3 +11,9 @@ jekyll serve --baseurl ""
 ```
 
 You could also fork this repo, create a gh_pages branch and let github serve it for you.
+
+This site is built with the default Jekyll theme using:
+
+```
+jekyll new *name of your site here*
+```
