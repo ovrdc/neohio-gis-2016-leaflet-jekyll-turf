@@ -53,7 +53,7 @@
           "Terrain": terrain
       }).addTo(map);
   {% if page.basemap %}{{ page.basemap }}{% else %}contrast{% endif %}.addTo(map);
-  //post content
+  //post content - file extension for map posts is is .html, for highlighting change to .js, then back to .html for proper jekyll site building
   {{ content }}
   //end post content
   </script>
