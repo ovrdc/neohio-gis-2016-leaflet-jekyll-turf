@@ -8,7 +8,7 @@ To view the examples, either run jekyll serve, or just view the html files in th
 baseurl: "/neohio-gis-2016-leaflet-jekyll-turf/" # the subpath of your site, e.g. /blog/
 url: "" # the base hostname & protocol for your site
 twitter_username: getbounds
-github_username:  reyemtm
+github_username:  ovrdc
 
 # Build settings
 markdown: kramdown
